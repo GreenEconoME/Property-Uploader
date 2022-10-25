@@ -4,7 +4,7 @@ import xmltodict
 import re
 import pandas as pd
 import streamlit as st
-from Utilities.lookups import us_state_to_abbrev, prop_use_type_lookup, required_prop_uses, epa_ids
+from Utilities.lookups import us_state_to_abbrev, prop_use_type_lookup, required_prop_uses
 
 # @TODO Need to have ESPM ID added to the building details form
 # @TODO Removed from the create properties function - refactor code to accomidate new format from returned building details forms
