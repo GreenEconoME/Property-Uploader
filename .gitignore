@@ -1,6 +1,7 @@
 # Add credentials to ignore
 Credentials.txt
 testing_building_survey_Michael_Edits.xlsx
+Testing
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
