@@ -82,7 +82,7 @@ def create_properties(order_form, domain, headers, auth):
 
             # Parse the reponse
             creation_response = xmltodict.parse(create_prop.content)
-            st.write(creation_response)
+            # st.write(creation_response)
             # If the property creation request failed, then the id will not be retreivable and will exit the try block
             prop_id = creation_response['response']['id']
 
