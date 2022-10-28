@@ -54,9 +54,10 @@ if credential_upload and building_survey is not None:
                 # Drop the empty columns from the order_form df
                 order_form = drop_empty_cols(order_form)
                 # Create the properties on the order form
-                created_props, props_failed_to_create = create_properties(order_form, domain, headers, auth)
+                created_props, props_failed_to_create, pre_existing_properties = create_properties(order_form, domain, headers, auth)
                 dfs['Created Props'] = created_props
                 dfs['Props Failed to Create'] = props_failed_to_create
+                dfs['Pre-Existing Properties'] = pre_existing_properties
                 st.write('Created Properties')
                 st.write(created_props)
                 
