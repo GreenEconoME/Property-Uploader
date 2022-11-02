@@ -6,7 +6,7 @@ import streamlit as st
 from Utilities.lookups import us_state_to_abbrev, prop_use_type_lookup, required_prop_uses, epa_ids
 from Utilities.check_value_exists import check_value_exists
 
-def create_properties(order_form, domain, headers, auth):
+def create_properties(order_form, auto_delete, domain, headers, auth):
     # (DELETE AFTER TESTING) Creating a list to hold the property ids of the buildings created to delete while testing
     props_created_during_testing = []
 
@@ -44,7 +44,7 @@ def create_properties(order_form, domain, headers, auth):
             # The order form data is stored in order_form
             building_data = {
                 'name' : order_form.loc[prop, 'Property Name'],
-                'primaryFunction' : order_form.loc[prop, 'Primary Property Use'], 
+                'primaryFunction' : order_form.loc[prop, 'Primary Property Use'].strip(), 
                 'address1' : order_form.loc[prop, 'Street Address'], 
                 'city' : order_form.loc[prop, 'City/Municipality'], 
                 'postalCode' : order_form.loc[prop, 'Postal Code'], 
@@ -96,6 +96,7 @@ def create_properties(order_form, domain, headers, auth):
                 creation_response = xmltodict.parse(create_prop.content)
                 # st.write(creation_response)
                 # If the property creation request failed, then the id will not be retreivable and will exit the try block
+                st.write(creation_response)
                 prop_id = creation_response['response']['id']
 
                 # (DELETE AFTER TESTING) add prop to list to delete 
@@ -148,6 +149,11 @@ def create_properties(order_form, domain, headers, auth):
                                                 auth = auth)
                     # st.write(f'port_id_req: {port_id_req.content}')
 
+                # If the auto_delete checkbox is selected, delete the property
+                if auto_delete:
+                    requests.delete(domain + f'/property/{prop_id}', 
+                                    headers = headers, 
+                                    auth = auth)
 
     # (DELETE AFTER TESTING) print out the properties just created to delete
     st.write(props_created_during_testing)

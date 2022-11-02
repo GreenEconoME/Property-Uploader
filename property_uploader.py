@@ -32,6 +32,18 @@ st.caption('Upload the API credentials within a .txt file with the Username and 
 # Add a file uploader to upload the building survey
 building_survey = st.file_uploader('Upload the Building Survey Spreadsheet')
 
+# Add a checkbox that will delete properties after they are uploaded
+auto_delete = st.checkbox(label = 'Automatically delete properties after successful upload?', 
+                            value = True, 
+                            help = 'This will remove properties as they are created. Once all of ' + 
+                                    'the properties are created successfully, uncheck this box to allow ' + 
+                                    'the properties to remain created in ESPM.' 
+                            )
+if auto_delete:
+    st.caption('Properties will be automatically deleted.')
+else:
+    st.caption('Properties will be created in ESPM if succesfully uploaded.')
+
 # Create a boolean to use to only call the download when the properties have finished uploading
 complete_upload = False
 
@@ -54,7 +66,7 @@ if credential_upload and building_survey is not None:
                 # Drop the empty columns from the order_form df
                 order_form = drop_empty_cols(order_form)
                 # Create the properties on the order form
-                created_props, props_failed_to_create, pre_existing_properties = create_properties(order_form, domain, headers, auth)
+                created_props, props_failed_to_create, pre_existing_properties = create_properties(order_form, auto_delete, domain, headers, auth)
                 dfs['Created Props'] = created_props
                 dfs['Props Failed to Create'] = props_failed_to_create
                 dfs['Pre-Existing Properties'] = pre_existing_properties
