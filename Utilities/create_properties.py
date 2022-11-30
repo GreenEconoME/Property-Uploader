@@ -118,6 +118,7 @@ def create_properties(order_form, auto_delete, domain, headers, auth):
             if 'ESPM ID' in current_prop:
                 # Post the LADBS ID as a unique identifier
                 ladbs_id = order_form.loc[prop, 'LADBS ID']
+                ladbs_id = str(ladbs_id).replace('.0', '')
                 # Check if the LADBS ID is populated, if it is post it as a unique identifier
                 if ladbs_id == ladbs_id:
                     # Create the XML to post the LADBS ID
