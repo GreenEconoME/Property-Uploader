@@ -66,6 +66,7 @@ prop_use_type_lookup = {
     'Office' : 'office', 
     'Refrigerated Warehouse' : 'refrigeratedWarehouse', 
     'Multifamily Housing' : 'multifamilyHousing', 
+    'Repair Services (Vehicle, Shoe, Locksmith, etc)' : 'repairServices'
 }
 
 required_prop_uses = {
