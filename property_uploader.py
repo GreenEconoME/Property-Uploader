@@ -70,8 +70,8 @@ if credential_upload and building_survey is not None:
                 dfs['Created Props'] = created_props
                 dfs['Props Failed to Create'] = props_failed_to_create
                 dfs['Pre-Existing Properties'] = pre_existing_properties
-                st.write('Created Properties')
-                st.write(created_props)
+                # st.write('Created Properties')
+                # st.write(created_props)
                 
                 if 'Building Details' in workbook.sheetnames:
                     building_details = pd.read_excel(building_survey, 
