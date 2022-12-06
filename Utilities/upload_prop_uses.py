@@ -9,7 +9,11 @@ from Utilities.lookups import us_state_to_abbrev, prop_use_type_lookup, required
 # @TODO Need to have ESPM ID added to the building details form
 # @TODO Removed from the create properties function - refactor code to accomidate new format from returned building details forms
 
-def upload_prop_uses(building_details, domain, headers, auth):
+def upload_prop_uses(building_details, reference_dict):
+    # Create variables to hold the espm credentials
+    auth = tuple(reference_dict['espm_config']['auth'])
+    domain = reference_dict['espm_config']['domain']
+    headers = reference_dict['espm_config']['headers']
 
     # If the property was created, but failed to populate the property uses, save this information within this list
     props_failed_w_prop_uses = []

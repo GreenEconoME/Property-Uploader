@@ -1,6 +1,7 @@
 # Import dependencies
 import streamlit as st
 import pandas as pd
+import json
 
 from openpyxl import load_workbook
 from Utilities.create_properties import create_properties
@@ -13,17 +14,17 @@ st.markdown("<h1 style = 'text-align: center; color: green;'>Green EconoME</h1>"
 st.markdown("<h2 style = 'text-align: center; color: black;'>Property Uploader</h2>", unsafe_allow_html = True)
 
 # Set the domain and headers for the API calls
-domain = 'https://portfoliomanager.energystar.gov/ws'
-headers = {'Content-Type': 'application/xml'}
+# domain = 'https://portfoliomanager.energystar.gov/ws'
+# headers = {'Content-Type': 'application/xml'}
 
 # Load credentials for the API calls into the auth variable
 credential_upload = st.file_uploader('Upload ESPM API Credentials')
 if credential_upload:
-    creds = []
-    for line in credential_upload:
-        creds.append(line.decode().strip())
-    auth = (creds[0], creds[1])
-
+    # Load the reference dictionary
+    reference_dict = json.loads(credential_upload.read()) 
+    
+    st.json(reference_dict)
+    
 st.caption('Upload the API credentials within a .txt file with the Username and Password on seperate lines. <br>' + 
             'The .txt file should be of the following format:<br>' + 
             'Username<br>' + 
@@ -66,10 +67,11 @@ if credential_upload and building_survey is not None:
                 # Drop the empty columns from the order_form df
                 order_form = drop_empty_cols(order_form)
                 # Create the properties on the order form
-                created_props, props_failed_to_create, pre_existing_properties = create_properties(order_form, auto_delete, domain, headers, auth)
+                created_props, props_failed_to_create, pre_existing_properties, zoho_upload = create_properties(order_form, auto_delete, reference_dict)
                 dfs['Created Props'] = created_props
                 dfs['Props Failed to Create'] = props_failed_to_create
                 dfs['Pre-Existing Properties'] = pre_existing_properties
+                dfs['Zoho Upload'] = zoho_upload
                 # st.write('Created Properties')
                 # st.write(created_props)
                 
@@ -89,7 +91,7 @@ if credential_upload and building_survey is not None:
                     st.write('Building Details after merging created dfs and dropping NAs in ESPM ID col')
                     st.dataframe(building_details.astype(str))
                     # Push the property uses for the properties within the building details df
-                    prop_uses_failed, successful_prop_use_population = upload_prop_uses(building_details, domain, headers, auth)
+                    prop_uses_failed, successful_prop_use_population = upload_prop_uses(building_details, reference_dict)
                     dfs['Prop Uses Failed to Populate'] = prop_uses_failed
                     dfs['Successful Prop Use Uploads'] = successful_prop_use_population
 
