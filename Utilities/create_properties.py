@@ -103,7 +103,11 @@ def create_properties(order_form, auto_delete, reference_dict):
                 creation_response = xmltodict.parse(create_prop.content)
                 # st.write(creation_response)
                 # If the property creation request failed, then the id will not be retreivable and will exit the try block
-                st.write(creation_response)
+                if create_prop.status_code == 201:
+                    st.write(f"Successful creation of property: {building_data['name']}")
+                else:
+                    st.write(f"Error creating property: {building_data['name']}")
+                    st.write(creation_response)
                 prop_id = creation_response['response']['id']
 
                 # (DELETE AFTER TESTING) add prop to list to delete 
@@ -170,59 +174,64 @@ def create_properties(order_form, auto_delete, reference_dict):
                     if value != value:
                         current_prop[key] = ''
                 reference_dict['who_pays'][''] = ''
-                zoho_buildings.append({
-                                    'Building Id': '',
-                                    'Building Name': current_prop['Property Name'],
-                                    'Building Owner': reference_dict['variables']['building_owner'],
-                                    'Building Owner ID': reference_dict['variables']['building_owner_id'],
-                                    'Email': reference_dict['emails'][current_prop['Property Manager']],
-                                    'Created By': '',
-                                    'Created by ID': '',
-                                    'Modified By': '',
-                                    'Modified by ID': '',
-                                    'Created Time': '',
-                                    'Modified Time': '',
-                                    'Last Activity Time': '',
-                                    'Tag': '',
-                                    'Primary Contact': reference_dict['emails'][current_prop['Property Manager']],
-                                    'Total Square Footage of the Building': current_prop['Gross Floor Area'],
-                                    'Who pays the electric bills?': reference_dict['who_pays'][current_prop['Who Pays Electric Bills?']],
-                                    'Year Built': current_prop['Year Built'],
-                                    'Property Use Type': current_prop['Primary Property Use'],
-                                    'Number of Units': current_prop['Number of Units at the building'],
-                                    'DBS Building ID': current_prop['LADBS ID'],
-                                    'Follow Up Date': '',
-                                    'Order Type': reference_dict['variables']['order_type'],
-                                    'Account (Building Owner)': reference_dict['variables']['acccount_id'],
-                                    'Current Energy Star Score': '',
-                                    'Current Benchmarking Year': '',
-                                    'Phase 2 Due Date': '',
-                                    'Source': '',
-                                    'Current Opportunity': '',
-                                    'Portfolio': reference_dict['variables']['portfolio'],
-                                    'Benchmark Group': '',
-                                    'Solar PVs': '',
-                                    'Owner Pays for Common Area': '',
-                                    'Who pays the gas bill?': reference_dict['who_pays'][current_prop['Who Pays Gas Bills?']],
-                                    'Who pays the water bill?': reference_dict['who_pays'][current_prop['Who Pays Water Bills?']],
-                                    'Unsubscribed Mode': '',
-                                    'Unsubscribed Time': '',
-                                    'Record Id': '',
-                                    'Gas Utility Provider': '',
-                                    'Water Utility Provider': '',
-                                    'Electric Utility Provider': '',
-                                    'Benchmarking Contact': '',
-                                    'Current Water Score (MF)': '',
-                                    'Onsite Contact': '',
-                                    'Survey Submitted': '',
-                                    'Survey Submitted Due Time': '',
-                                    'ESPM Property ID': current_prop['ESPM ID'],
-                                    'AD Notes (MS)': '',
-                                    'Building Status': reference_dict['variables']['building_status']
-                                    })
+
+                # Create a dictionary to hold the zoho data for the current building
+                zoho_data = {
+                            'Building Id': '',
+                            'Building Name': current_prop['Property Name'],
+                            'Building Owner': reference_dict['variables']['building_owner'],
+                            'Building Owner ID': reference_dict['variables']['building_owner_id'],
+                            'Email': reference_dict['emails'][current_prop['Property Manager']],
+                            'Created By': '',
+                            'Created by ID': '',
+                            'Modified By': '',
+                            'Modified by ID': '',
+                            'Created Time': '',
+                            'Modified Time': '',
+                            'Last Activity Time': '',
+                            'Tag': '',
+                            'Primary Contact': reference_dict['emails'][current_prop['Property Manager']],
+                            'Total Square Footage of the Building': current_prop['Gross Floor Area'],
+                            'Who pays the electric bills?': reference_dict['who_pays'][current_prop['Who Pays Electric Bills?']],
+                            'Year Built': current_prop['Year Built'],
+                            'Property Use Type': current_prop['Primary Property Use'],
+                            'Number of Units': current_prop['Number of Units at the building'],
+                            'DBS Building ID': current_prop['LADBS ID'],
+                            'Follow Up Date': '',
+                            'Order Type': reference_dict['variables']['order_type'],
+                            'Account (Building Owner)': reference_dict['variables']['account_id'],
+                            'Current Energy Star Score': '',
+                            'Current Benchmarking Year': '',
+                            'Phase 2 Due Date': '',
+                            'Source': '',
+                            'Current Opportunity': '',
+                            'Portfolio': reference_dict['variables']['portfolio'],
+                            'Benchmark Group': '',
+                            'Solar PVs': '',
+                            'Owner Pays for Common Area': '',
+                            'Who pays the gas bill?': reference_dict['who_pays'][current_prop['Who Pays Gas Bills?']],
+                            'Who pays the water bill?': reference_dict['who_pays'][current_prop['Who Pays Water Bills?']],
+                            'Unsubscribed Mode': '',
+                            'Unsubscribed Time': '',
+                            'Record Id': '',
+                            'Gas Utility Provider': '',
+                            'Water Utility Provider': '',
+                            'Electric Utility Provider': '',
+                            'Benchmarking Contact': '',
+                            'Current Water Score (MF)': '',
+                            'Onsite Contact': '',
+                            'Survey Submitted': '',
+                            'Survey Submitted Due Time': '',
+                            'ESPM Property ID': current_prop['ESPM ID'],
+                            'AD Notes (MS)': '',
+                            'Building Status': reference_dict['variables']['building_status']
+                            }
+
+                zoho_buildings.append(zoho_data)
 
 
     # (DELETE AFTER TESTING) print out the properties just created to delete
+    st.write('ESPM IDs of successfully created properties:')
     st.write(props_created_during_testing)
 
     return pd.DataFrame(created_props), pd.DataFrame(props_failed_to_create), pd.DataFrame(pre_existing_properties), pd.DataFrame(zoho_buildings)

@@ -22,7 +22,7 @@ credential_upload = st.file_uploader('Upload ESPM API Credentials')
 if credential_upload:
     # Load the reference dictionary
     reference_dict = json.loads(credential_upload.read()) 
-        
+
 st.caption('Upload the Credentials.txt file', unsafe_allow_html = True)
 
 # Add a file uploader to upload the building survey
@@ -67,8 +67,6 @@ if credential_upload and building_survey is not None:
                 dfs['Props Failed to Create'] = props_failed_to_create
                 dfs['Pre-Existing Properties'] = pre_existing_properties
                 dfs['Zoho Upload'] = zoho_upload
-                # st.write('Created Properties')
-                # st.write(created_props)
                 
                 if 'Building Details' in workbook.sheetnames:
                     building_details = pd.read_excel(building_survey, 
