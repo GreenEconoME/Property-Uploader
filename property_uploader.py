@@ -22,13 +22,8 @@ credential_upload = st.file_uploader('Upload ESPM API Credentials')
 if credential_upload:
     # Load the reference dictionary
     reference_dict = json.loads(credential_upload.read()) 
-    
-    st.json(reference_dict)
-    
-st.caption('Upload the API credentials within a .txt file with the Username and Password on seperate lines. <br>' + 
-            'The .txt file should be of the following format:<br>' + 
-            'Username<br>' + 
-            'Password', unsafe_allow_html = True)
+        
+st.caption('Upload the Credentials.txt file', unsafe_allow_html = True)
 
 # Add a file uploader to upload the building survey
 building_survey = st.file_uploader('Upload the Building Survey Spreadsheet')

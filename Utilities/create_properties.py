@@ -165,7 +165,7 @@ def create_properties(order_form, auto_delete, reference_dict):
 
                 # Create the Zoho building upload data for this property
                 zoho_dict = {}
-                st.json(current_prop)
+                # Change nans to empty strings
                 for key, value in current_prop.items():
                     if value != value:
                         current_prop[key] = ''
@@ -184,7 +184,7 @@ def create_properties(order_form, auto_delete, reference_dict):
                                     'Modified Time': '',
                                     'Last Activity Time': '',
                                     'Tag': '',
-                                    'Primary Contact': '',
+                                    'Primary Contact': reference_dict['emails'][current_prop['Property Manager']],
                                     'Total Square Footage of the Building': current_prop['Gross Floor Area'],
                                     'Who pays the electric bills?': reference_dict['who_pays'][current_prop['Who Pays Electric Bills?']],
                                     'Year Built': current_prop['Year Built'],
@@ -193,13 +193,13 @@ def create_properties(order_form, auto_delete, reference_dict):
                                     'DBS Building ID': current_prop['LADBS ID'],
                                     'Follow Up Date': '',
                                     'Order Type': reference_dict['variables']['order_type'],
-                                    'Account (Building Owner)': reference_dict['variables']['building_owner_id'],
+                                    'Account (Building Owner)': reference_dict['variables']['acccount_id'],
                                     'Current Energy Star Score': '',
                                     'Current Benchmarking Year': '',
                                     'Phase 2 Due Date': '',
                                     'Source': '',
                                     'Current Opportunity': '',
-                                    'Portfolio': '',
+                                    'Portfolio': reference_dict['variables']['portfolio'],
                                     'Benchmark Group': '',
                                     'Solar PVs': '',
                                     'Owner Pays for Common Area': '',
